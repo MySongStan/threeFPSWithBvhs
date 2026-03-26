@@ -1,20 +1,42 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# FPS BVH Collision Demo
 
-# Run and deploy your AI Studio app
+A high-performance first-person shooter (FPS) collision demonstration built with **Three.js** and **three-mesh-bvh**. This project showcases efficient capsule-mesh intersection in a dynamic environment with spatial partitioning optimizations.
 
-This contains everything you need to run your app locally.
+## 🚀 Key Features
 
-View your app in AI Studio: https://ai.studio/apps/4e70a92f-91ea-44d2-b917-6663f866ce91
+- **High-Performance Collision Detection**: Powered by `three-mesh-bvh` for precise and fast capsule-to-mesh intersection tests.
+- **Spatial Grid Partitioning**: A custom spatial grid optimization that narrows down collision candidates, significantly reducing the number of BVH tests per frame in dense environments.
+- **Dynamic Collider Support**: Real-time addition and removal of colliders (e.g., falling boxes) with automatic integration into the collision system.
+- **Smooth First-Person Controller**: 
+  - WASD for navigation.
+  - Space for ascent/jump.
+  - Mouse look with Pointer Lock API support.
+  - Smooth interpolation for movement and orientation.
+- **Visual Debugging**: Real-time toggle for **Spatial Grid Visualization** to visualize how the scene is partitioned for collision detection.
+- **Stress Test System**: Automatic spawning of dynamic objects to demonstrate engine stability and performance under load.
+- **Modern UI/UX**: A sleek, dark-themed editorial interface with responsive design and fullscreen support.
 
-## Run Locally
+## 🛠️ Optimization Points
 
-**Prerequisites:**  Node.js
+- **BVH Acceleration**: Leverages Bounding Volume Hierarchies to achieve logarithmic time complexity for intersection tests, even with complex geometries.
+- **Spatial Culling**: The grid-based candidate selection ensures that the player only checks for collisions with objects in their immediate vicinity.
+- **Efficient Matrix Management**: Optimized `matrixWorld` updates for dynamic colliders to minimize CPU overhead.
+- **Memory Management**: Automatic lifecycle management for dynamic objects to ensure consistent performance during long-running stress tests.
+- **Type-Safe Implementation**: Fully written in TypeScript for robust development and clear data structures.
 
+## 🕹️ Controls
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- **WASD**: Move around the scene.
+- **SPACE**: Ascend/Jump.
+- **MOUSE**: Look around.
+- **ESC**: Release pointer lock/Pause.
+- **F**: Toggle Fullscreen.
+- **Grid Icon (UI)**: Toggle Spatial Grid Visualization.
+
+## 📦 Tech Stack
+
+- **Three.js**: 3D Rendering engine.
+- **three-mesh-bvh**: BVH implementation for Three.js.
+- **React**: UI framework.
+- **Tailwind CSS**: Styling and layout.
+- **TypeScript**: Type safety and modern JS features.

@@ -207,7 +207,7 @@ export default function App() {
     console.log('PlayerController initialized');
 
     // --- Dynamic Boxes Stress Test ---
-    const dynamicBoxes: { mesh: THREE.Mesh; bvh: MeshBVH }[] = [];
+    const dynamicBoxes: { id: string; mesh: THREE.Mesh; bvh: MeshBVH }[] = [];
     const boxGeometry = new THREE.BoxGeometry(4, 4, 4);
     boxGeometry.computeBoundingBox();
     const boxBVH = new MeshBVH(boxGeometry);
@@ -215,10 +215,10 @@ export default function App() {
     const updateColliders = () => {
       if (!controllerRef.current) return;
       controllerRef.current.clearColliders();
-      controllerRef.current.addCollider(staticBVH);
+      controllerRef.current.addCollider('static-env', staticBVH);
       dynamicBoxes.forEach(box => {
         box.mesh.updateMatrixWorld();
-        controllerRef.current?.addCollider(box.bvh, box.mesh.matrixWorld);
+        controllerRef.current?.addCollider(box.id, box.bvh, box.mesh.matrixWorld);
       });
     };
 
@@ -227,6 +227,7 @@ export default function App() {
 
       if (dynamicBoxes.length < 30) {
         // Add a box
+        const id = `box-${Math.random().toString(36).substr(2, 9)}`;
         const material = new THREE.MeshStandardMaterial({ 
           color: new THREE.Color().setHSL(Math.random(), 0.7, 0.5),
           emissive: new THREE.Color().setHSL(Math.random(), 0.7, 0.2),
@@ -241,7 +242,7 @@ export default function App() {
         mesh.castShadow = true;
         mesh.receiveShadow = true;
         scene.add(mesh);
-        dynamicBoxes.push({ mesh, bvh: boxBVH });
+        dynamicBoxes.push({ id, mesh, bvh: boxBVH });
       } else {
         // Remove oldest box
         const oldest = dynamicBoxes.shift();
@@ -399,10 +400,24 @@ export default function App() {
         </div>
       </div>
 
+      {/* Debug/Grid Toggle Button */}
+      <button 
+        onClick={() => {
+          if (controllerRef.current) {
+            controllerRef.current.showGrid = !controllerRef.current.showGrid;
+            controllerRef.current.updateGridVisuals();
+          }
+        }}
+        className="absolute top-6 right-20 z-50 p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/40 transition-all backdrop-blur-sm cursor-pointer"
+        title="Toggle Spatial Grid Visualization"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+      </button>
+
       {/* Fullscreen Button */}
       <button 
         onClick={() => controllerRef.current?.toggleFullscreen()}
-        className="absolute top-6 right-6 p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/40 transition-all backdrop-blur-sm"
+        className="absolute top-6 right-6 z-50 p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/40 transition-all backdrop-blur-sm cursor-pointer"
         title="Toggle Fullscreen (F)"
       >
         {isFullscreen ? (
