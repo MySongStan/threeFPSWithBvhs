@@ -1,0 +1,5 @@
+{
+  "name": "Three.js FPS BVH Controller",
+  "description": "A first-person shooter controller using Three.js and three-mesh-bvh for high-performance collision detection.",
+  "requestFramePermissions": []
+}
